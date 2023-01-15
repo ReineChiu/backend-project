@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/message.css' %}">
+    <title>文字圖片留言</title>
+</head>    
+<body>
+    <div class="frame">
+        <div class="titlehead">發表一篇圖文</div>
+        <form>
+            {% csrf_token %}
+            <div class="block">
+                <label for="">文字內容</label>
+                <input class="text" id="uploadtext" type="text" name="text" placeholder="輸入留言內容">
+            </div>
+            <div class="block">
+                <label for="">圖片檔案</label>
+                <input class="file" id="uploadfile" type="file" name="file">
+            </div>
+        </form>
+        <div class="button"><button class="btn" id="sent">送出</button></div>
+    </div>
+    <hr>
+    <div class="frame">
+            <div class="box"></div>
+    </div>
+</body>
+<script src="{% static 'js/message.js' %}"></script>
+</html>
