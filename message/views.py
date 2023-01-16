@@ -6,7 +6,7 @@ from django.template import loader
 from . import models
 from datetime import datetime
 
-import json, boto3, re, base64
+import json, boto3, re, base64, secrets
 from django.conf import settings
 
 from .models import Upload
@@ -25,16 +25,19 @@ def message(request):
 def uploadFile(request):
     try:
         if request.method == "POST":
-            image = request.FILES.get('image')
             text = request.POST.get('text')
+            image = request.FILES.get('image')
 
-            obj = Upload(content=text, file_name=image.name) 
+            #生成 8 bytes 長度的隨機十六進制字符串
+            random_name = secrets.token_hex(8)
+
+            obj = Upload(content=text, file_name=random_name+image.name) 
             obj.save()
 
             s3.upload_fileobj(
                 image,
                 settings.AWS_STORAGE_BUCKET_NAME,
-                settings.AWS_STORAGE_BUCKET_FOLDER + image.name
+                settings.AWS_STORAGE_BUCKET_FOLDER + random_name+image.name
             )
 
             return JsonResponse({"ok":True, "message":"上傳檔案成功"})
